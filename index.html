@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>阿摩學士後中西醫歷屆試題連結總整理</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap');
+    body { font-family: 'Noto Sans TC', sans-serif; }
+    .scrollbar-thin::-webkit-scrollbar { width: 6px; height: 6px; }
+    .scrollbar-thin::-webkit-scrollbar-track { background: #f1f1f1; }
+    .scrollbar-thin::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+    .scrollbar-thin::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
+
+  <!-- Header -->
+  <header class="bg-indigo-900 text-white shadow-md sticky top-0 z-30">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap justify-between items-center gap-3">
+      <div class="flex items-center space-x-3">
+        <i class="fa-solid fa-graduation-cap text-2xl text-amber-400"></i>
+        <div>
+          <h1 class="text-xl font-bold tracking-wide">阿摩學士後中西醫歷屆試題總整理</h1>
+          <p class="text-xs text-indigo-200">中國醫・義守・慈濟・高醫・中山・清大 歷年試題快捷索引</p>
+        </div>
+      </div>
+      <div class="flex items-center space-x-2">
+        <button onclick="openYearModal()" class="bg-indigo-800 hover:bg-indigo-700 text-xs px-3 py-1.5 rounded border border-indigo-600 transition flex items-center gap-1.5">
+          <i class="fa-solid fa-calendar-days text-amber-300"></i> 年度設定 (<span id="maxYearDisplay">115</span>)
+        </button>
+        <button onclick="openBatchModal()" class="bg-indigo-800 hover:bg-indigo-700 text-xs px-3 py-1.5 rounded border border-indigo-600 transition flex items-center gap-1.5">
+          <i class="fa-solid fa-file-import text-amber-300"></i> 批量匯入/匯出網址
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <div class="flex-1 max-w-7xl w-full mx-auto p-4 flex flex-col md:flex-row gap-6">
+
+    <!-- Left Sidebar: Subjects -->
+    <aside class="w-full md:w-64 bg-white rounded-xl shadow-sm border border-slate-200 p-4 shrink-0 h-fit">
+      <h2 class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-3 flex items-center justify-between">
+        <span><i class="fa-solid fa-book-open text-indigo-600 mr-2"></i>選擇考試科目</span>
+      </h2>
+      <nav id="subjectList" class="space-y-1">
+        <!-- JS Dynamic Generation -->
+      </nav>
+
+      <div class="mt-6 p-3 bg-indigo-50 border border-indigo-100 rounded-lg text-xs text-indigo-800 space-y-2">
+        <div class="font-semibold flex items-center gap-1">
+          <i class="fa-solid fa-circle-info text-indigo-600"></i> 圖示說明
+        </div>
+        <div class="flex items-center gap-2 text-emerald-700">
+          <i class="fa-solid fa-circle-check"></i>
+          <span><b>綠色勾勾</b>：直達試題專頁 (exam)</span>
+        </div>
+        <div class="flex items-center gap-2 text-sky-700">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <span><b>藍色搜尋</b>：阿摩精準搜尋</span>
+        </div>
+        <div class="flex items-center gap-2 text-slate-400">
+          <i class="fa-solid fa-ban"></i>
+          <span><b>灰色區塊</b>：未招生 / 無此科目</span>
+        </div>
+        <p class="text-[11px] text-slate-500 pt-1 border-t border-indigo-100">
+          💡 提示：在試題按鈕上按<b>右鍵</b>可快捷設定/修改該年阿摩網址。
+        </p>
+      </div>
+    </aside>
+
+    <!-- Right Main Table -->
+    <main class="flex-1 bg-white rounded-xl shadow-sm border border-slate-200 p-4 flex flex-col min-w-0">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 mb-3 border-b border-slate-100 gap-2">
+        <div>
+          <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+            <span id="currentSubjectTitle" class="text-indigo-600">英文</span>
+            <span class="text-xs font-normal text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full" id="subjectSubtitle">後中醫 / 後西醫歷屆試題</span>
+          </h2>
+        </div>
+        <div class="flex items-center gap-2">
+          <div class="relative">
+            <input type="text" id="yearSearchInput" placeholder="搜尋年份 (如 114)..." oninput="filterYears()" class="w-36 text-xs bg-slate-50 border border-slate-300 rounded-lg pl-7 pr-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-2 text-slate-400 text-xs"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- Table Container -->
+      <div class="overflow-x-auto overflow-y-auto max-h-[calc(100vh-220px)] scrollbar-thin border border-slate-200 rounded-lg">
+        <table class="w-full text-sm text-left border-collapse">
+          <thead class="text-xs text-slate-700 uppercase bg-slate-100 sticky top-0 z-20 shadow-sm">
+            <tr>
+              <th scope="col" class="px-3 py-3 w-20 text-center border-b border-r border-slate-200 bg-slate-100">學年度</th>
+              <th scope="col" class="px-3 py-3 text-center border-b border-r border-slate-200">中國醫</th>
+              <th scope="col" class="px-3 py-3 text-center border-b border-r border-slate-200">義守</th>
+              <th scope="col" class="px-3 py-3 text-center border-b border-r border-slate-200">慈濟</th>
+              <th scope="col" class="px-3 py-3 text-center border-b border-r border-slate-200">高醫</th>
+              <th scope="col" class="px-3 py-3 text-center border-b border-r border-slate-200">中山</th>
+              <th scope="col" class="px-3 py-3 text-center border-b border-slate-200">清大</th>
+            </tr>
+          </thead>
+          <tbody id="examTableBody" class="divide-y divide-slate-200">
+            <!-- Dynamic rows -->
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+
+  <!-- Modals -->
+  <div id="editUrlModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+    <div class="bg-white rounded-xl shadow-xl max-w-md w-full p-5 space-y-4">
+      <div class="flex justify-between items-center border-b pb-2">
+        <h3 class="font-bold text-slate-800" id="editModalTitle">設定試題網址</h3>
+        <button onclick="closeEditModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+      </div>
+      <div>
+        <label class="block text-xs font-semibold text-slate-600 mb-1">阿摩線上測驗網址 (exam-xxxx.htm 或 search)</label>
+        <input type="url" id="modalUrlInput" placeholder="https://yamol.tw/exam-..." class="w-full text-xs p-2.5 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+        <p class="text-[11px] text-slate-400 mt-1">留空將恢復預設的精準關鍵字搜尋。</p>
+      </div>
+      <div class="flex justify-end gap-2 pt-2">
+        <button onclick="closeEditModal()" class="px-3 py-1.5 text-xs text-slate-600 hover:bg-slate-100 rounded-lg">取消</button>
+        <button onclick="saveSingleUrl()" class="px-4 py-1.5 text-xs bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 font-medium">儲存設定</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="yearModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+    <div class="bg-white rounded-xl shadow-xl max-w-sm w-full p-5 space-y-4">
+      <div class="flex justify-between items-center border-b pb-2">
+        <h3 class="font-bold text-slate-800">最新考題學年度設定</h3>
+        <button onclick="closeYearModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+      </div>
+      <div>
+        <label class="block text-xs font-semibold text-slate-600 mb-1">最高學年度 (例如明年考完可設為 116)</label>
+        <input type="number" id="maxYearInput" value="115" min="100" max="130" class="w-full text-sm p-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+      </div>
+      <div class="flex justify-end gap-2 pt-2">
+        <button onclick="closeYearModal()" class="px-3 py-1.5 text-xs text-slate-600 hover:bg-slate-100 rounded-lg">取消</button>
+        <button onclick="saveMaxYear()" class="px-4 py-1.5 text-xs bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 font-medium">套用並更新表格</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="batchModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+    <div class="bg-white rounded-xl shadow-xl max-w-2xl w-full p-5 space-y-4">
+      <div class="flex justify-between items-center border-b pb-2">
+        <h3 class="font-bold text-slate-800">網址對應 JSON 匯入 / 匯出</h3>
+        <button onclick="closeBatchModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+      </div>
+      <div>
+        <textarea id="batchJsonTextarea" rows="10" class="w-full text-xs font-mono p-2.5 border rounded-lg bg-slate-50 focus:ring-2 focus:ring-indigo-500 focus:outline-none scrollbar-thin" placeholder='{"English_cmu_115": "https://yamol.tw/..."}'></textarea>
+      </div>
+      <div class="flex justify-between items-center pt-2">
+        <button onclick="resetToDefault()" class="text-xs text-rose-600 hover:underline">重置為預設網址</button>
+        <div class="flex gap-2">
+          <button onclick="closeBatchModal()" class="px-3 py-1.5 text-xs text-slate-600 hover:bg-slate-100 rounded-lg">取消</button>
+          <button onclick="saveBatchJson()" class="px-4 py-1.5 text-xs bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 font-medium">儲存並覆蓋</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const SUBJECTS = [
+      { id: 'Chinese', name: '國文', subtitle: '後中醫考科' },
+      { id: 'English', name: '英文', subtitle: '後中醫 / 後西醫考科' },
+      { id: 'Biology', name: '生物學', subtitle: '後中醫(生物/普通生物) / 後西醫(生物生化)' },
+      { id: 'Chemistry', name: '化學/有機化學', subtitle: '有機化學 / 普通化學 / 物理及化學' },
+      { id: 'TCM', name: '中醫基礎醫學', subtitle: '後中醫特有考科 (中國醫/義守/慈濟)' },
+      { id: 'Physics', name: '物理學', subtitle: '後西醫特有考科 (高醫/中山/清大)' }
+    ];
+
+    const SCHOOLS = [
+      { id: 'cmu', name: '中國醫', fullName: '中國醫藥大學', type: 'TCM', startYear: 90 },
+      { id: 'isu', name: '義守', fullName: '義守大學', type: 'TCM', startYear: 100 },
+      { id: 'tzu', name: '慈濟', fullName: '慈濟大學', type: 'TCM', startYear: 101 },
+      { id: 'kmu', name: '高醫', fullName: '高雄醫學大學', type: 'BOTH', startYear: 90 },
+      { id: 'nsysu', name: '中山', fullName: '國立中山大學', type: 'WEST', startYear: 111 },
+      { id: 'nthu', name: '清大', fullName: '國立清華大學', type: 'WEST', startYear: 111 }
+    ];
+
+    const DEFAULT_URL_MAPPINGS = {
+      // 國文 (Chinese)
+      "Chinese_cmu_115": "https://yamol.tw/exam-115%E5%B9%B4++115+%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E5%85%A5%E5%AD%B8%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%EF%B8%B0%E5%9C%8B%E6%96%87138798-138798.htm",
+      "Chinese_tzu_115": "https://yamol.tw/exam-115%E5%B9%B4++115+%E6%85%88%E6%BF%9F%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E8%A9%A6%E9%A1%8C%EF%BC%9A%E5%9C%8B%E6%96%87138634-138634.htm",
+      "Chinese_isu_115": "https://yamol.tw/exam-115%E5%B9%B4++115+%E7%BE%A9%E5%AE%88%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E5%85%A5%E5%AD%B8%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%EF%BC%9A%E5%9C%8B%E6%96%87138214-138214.htm",
+      "Chinese_tzu_114": "https://yamol.tw/exam-114%E5%B9%B4++114+%E6%85%88%E6%BF%9F%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E8%A9%A6%E9%A1%8C%EF%BC%9A%E5%9C%8B%E6%96%87%E7%A7%91126761-126761.htm",
+      "Chinese_isu_114": "https://yamol.tw/exam-114%E5%B9%B4++114+%E7%BE%A9%E5%AE%88%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E5%85%A5%E5%AD%B8%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E8%A9%A6%E9%A1%8C%EF%BC%9A%E5%9C%8B%E6%96%87126423-126423.htm",
+      "Chinese_cmu_114": "https://yamol.tw/exam-114%E5%B9%B4++114+%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E5%85%A5%E5%AD%B8%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%EF%B8%B0%E5%9C%8B%E6%96%87126235-126235.htm",
+      "Chinese_cmu_113": "https://yamol.tw/exam-113%E5%B9%B4++113+%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E5%85%A5%E5%AD%B8%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E8%A9%A6%E9%A1%8C%EF%BC%9A%E5%9C%8B%E6%96%8712158-121586.htm",
+      "Chinese_tzu_113": "https://yamol.tw/exam-113%E5%B9%B4++113+%E6%85%88%E6%BF%9F%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E8%A9%A6%E9%A1%8C%EF%BC%9A%E5%9C%8B%E6%96%87%E7%A7%91119352-119352.htm",
+      "Chinese_isu_113": "https://yamol.tw/exam-113%E5%B9%B4++113+%E7%BE%A9%E5%AE%88%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E5%85%A5%E5%AD%B8%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E8%A9%A6%E9%A1%8C%EF%BC%9A%E5%9C%8B%E6%96%87119300-119300.htm",
+      "Chinese_tzu_112": "https://yamol.tw/exam-112%E5%B9%B4++112+%E6%85%88%E6%BF%9F%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%EF%BC%9A%E5%9C%8B%E6%96%87114162-114162.htm",
+      "Chinese_cmu_112": "https://yamol.tw/exam-112%E5%B9%B4++112+%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E5%85%A5%E5%AD%B8%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E8%A9%A6%E9%A1%8C%EF%BC%9A%E5%9C%8B%E6%96%8711412-114127.htm",
+      "Chinese_isu_112": "https://yamol.tw/exam-112%E5%B9%B4++112+%E7%BE%A9%E5%AE%88%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E5%85%A5%E5%AD%B8%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E8%A9%A6%E9%A1%8C%EF%BC%9A%E5%9C%8B%E6%96%87113711-113711.htm",
+      "Chinese_tzu_111": "https://yamol.tw/exam-111%E5%B9%B4++111+%E6%85%88%E6%BF%9F%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%EF%BC%9A%E5%9C%8B%E6%96%87107698-107698.htm",
+      "Chinese_cmu_111": "https://yamol.tw/exam-111%E5%B9%B4++111+%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E5%85%A5%E5%AD%B8%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E5%9C%8B%E6%96%87107573-107573.htm",
+      "Chinese_isu_111": "https://yamol.tw/exam-111%E5%B9%B4++%E7%BE%A9%E5%AE%88%E5%A4%A7%E5%AD%B8+111+%E5%AD%B8%EF%A6%8E%EF%A8%81+%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB+%E5%85%A5%E5%AD%B8%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E8%A9%A6%E9%A1%8C10731-107318.htm",
+      "Chinese_tzu_110": "https://yamol.tw/exam-110%E5%B9%B4++110+%E6%85%88%E6%BF%9F%E5%A4%A7%E5%AD%B8%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E5%9C%8B%E6%96%87100422-100422.htm",
+      "Chinese_isu_110": "https://yamol.tw/exam-110%E5%B9%B4++110+%E7%BE%A9%E5%AE%88%E5%A4%A7%E5%AD%B8%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%9C%8B%E6%96%87%E7%A7%91100237-100237.htm",
+      "Chinese_cmu_110": "https://yamol.tw/exam-110%E5%B9%B4++110+%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E5%85%A5%E5%AD%B8%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E8%A9%A6%E9%A1%8C%EF%BC%9A%E5%9C%8B%E6%96%8710000-100006.htm",
+      "Chinese_isu_109": "https://yamol.tw/exam-109%E5%B9%B4++109+%E7%BE%A9%E5%AE%88%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E5%85%A5%E5%AD%B8%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%EF%BC%9A%E5%9C%8B%E6%96%8787434-87434.htm",
+      "Chinese_tzu_109": "https://yamol.tw/exam-109%E5%B9%B4++109+%E6%85%88%E6%BF%9F%E5%A4%A7%E5%AD%B8+_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E6%8B%9B%E7%94%9F%EF%BC%9A%E5%9C%8B%E6%96%8786264-86264.htm",
+      "Chinese_cmu_109": "https://yamol.tw/exam-109%E5%B9%B4++109+%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8+%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E5%85%A5%E5%AD%B8%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%EF%BC%9A%E5%9C%8B%E6%96%8785647-85647.htm",
+      "Chinese_isu_108": "https://yamol.tw/exam-108%E5%B9%B4++%E7%BE%A9%E5%AE%88%E5%A4%A7%E5%AD%B8108+%E5%AD%B8%E5%B9%B4%E5%BA%A6%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E5%9C%8B%E6%96%8777127-77127.htm",
+      "Chinese_tzu_108": "https://yamol.tw/exam-108%E5%B9%B4++108+%E6%85%88%E6%BF%9F%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%EF%BC%9A%E5%9C%8B%E6%96%8776352-76352.htm",
+      "Chinese_cmu_108": "https://yamol.tw/exam-108%E5%B9%B4++%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8+108+%E5%AD%B8%E5%B9%B4%E5%BA%A6%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E5%85%A5%E5%AD%B8%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E5%9C%8B%E6%96%87%E8%A9%A6%E9%A1%8C760-76043.htm",
+      "Chinese_tzu_107": "https://yamol.tw/exam-107%E5%B9%B4++%E6%85%88%E6%BF%9F%E5%A4%A7%E5%AD%B8+107+%E5%AD%B8%E5%B9%B4%E5%BA%A6%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E5%9C%8B%E6%96%8769815-69815.htm",
+      "Chinese_isu_107": "https://yamol.tw/exam-107%E5%B9%B4++%E7%BE%A9%E5%AE%88%E5%A4%A7%E5%AD%B8+107+%E5%AD%B8%E5%B9%B4%E5%BA%A6+%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB+%E5%85%A5%E5%AD%B8%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E8%A9%A6%E9%A1%8C%E5%9C%8B%E6%96%87697-69794.htm",
+      "Chinese_cmu_107": "https://yamol.tw/exam-107%E5%B9%B4++107+%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E5%85%A5%E5%AD%B8%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E8%A9%A6%E9%A1%8C%EF%BC%9A%E5%9C%8B%E6%96%8769142-69142.htm",
+      "Chinese_isu_106": "https://yamol.tw/exam-106%E5%B9%B4++%E7%BE%A9%E5%AE%88%E5%A4%A7%E5%AD%B8+106+%E5%AD%B8%EF%A6%8E%EF%A8%81+%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%9C%8B+%E6%96%8775321-75321.htm",
+      "Chinese_tzu_106": "https://yamol.tw/exam-106%E5%B9%B4++106+%E6%85%88%E6%BF%9F%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%EF%BC%9A%E5%9C%8B%E6%96%8769923-69923.htm",
+      "Chinese_cmu_106": "https://yamol.tw/exam-106%E5%B9%B4++%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8++%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB++%E5%9C%8B%E6%96%87++%E8%A9%A6%E9%A1%8C69391-69391.htm",
+      "Chinese_isu_105": "https://yamol.tw/exam-105%E5%B9%B4++%E7%BE%A9%E5%AE%88%E5%A4%A7%E5%AD%B8%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB69930-69930.htm",
+      "Chinese_cmu_105": "https://yamol.tw/exam-105%E5%B9%B4++%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8+105+%E5%AD%B8%E5%B9%B4%E5%BA%A6%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%9C%8B%E6%96%8760536-60536.htm",
+      "Chinese_tzu_105": "https://yamol.tw/exam-105%E5%B9%B4++105+%E6%85%88%E6%BF%9F%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E8%A9%A6%E9%A1%8C%EF%BC%9A%E5%9C%8B%E6%96%87%E7%A7%9160094-60094.htm",
+      "Chinese_cmu_104": "https://yamol.tw/exam-104%E5%B9%B4++%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8+%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB+%E5%9C%8B%E6%96%8724088-24088.htm",
+      "Chinese_tzu_104": "https://yamol.tw/exam-104%E5%B9%B4++%E6%85%88%E6%BF%9F%E5%A4%A7%E5%AD%B8%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%9C%8B%E6%96%8723814-23814.htm",
+      "Chinese_isu_104": "https://yamol.tw/exam-104%E5%B9%B4++%E7%BE%A9%E5%AE%88%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB++%E5%9C%8B%E6%96%8722065-22065.htm",
+      "Chinese_isu_103": "https://yamol.tw/exam-103%E5%B9%B4++%E7%BE%A9%E5%AE%88%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB++%E5%9C%8B%E6%96%8724099-24099.htm",
+      "Chinese_cmu_103": "https://yamol.tw/exam-103%E5%B9%B4++%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E5%9C%8B%E6%96%87%E8%80%83%E5%8D%B722143-22143.htm",
+      "Chinese_tzu_103": "https://yamol.tw/exam-103%E5%B9%B4++%E6%85%88%E6%BF%9F%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%9C%8B%E6%96%8722140-22140.htm",
+      "Chinese_isu_102": "https://yamol.tw/exam-102%E5%B9%B4++%E7%BE%A9%E5%AE%88%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB++%E5%9C%8B%E6%96%8724365-24365.htm",
+      "Chinese_tzu_102": "https://yamol.tw/exam-102%E5%B9%B4++%E6%85%88%E6%BF%9F%E5%A4%A7%E5%AD%B8+102+%E5%AD%B8%E5%B9%B4%E5%BA%A6%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6+%E5%9C%8B%E6%96%8722205-22205.htm",
+      "Chinese_cmu_102": "https://yamol.tw/exam-102%E5%B9%B4++%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8102%E5%AD%B8%E5%B9%B4%E5%BA%A6%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E8%A9%A6%E9%A1%8C16294-16294.htm",
+      "Chinese_tzu_101": "https://yamol.tw/exam-101%E5%B9%B4++%E6%85%88%E6%BF%9F%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB++%E5%9C%8B%E6%96%8775313-75313.htm",
+      "Chinese_isu_101": "https://yamol.tw/exam-101%E5%B9%B4++%E7%BE%A9%E5%AE%88%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB++%E5%9C%8B%E6%96%8724480-24480.htm",
+      "Chinese_cmu_101": "https://yamol.tw/exam-101%E5%B9%B4++%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E5%9C%8B%E6%96%87%E8%80%83%E5%8D%B722315-22315.htm",
+      "Chinese_isu_100": "https://yamol.tw/exam-100%E5%B9%B4++100+%E7%BE%A9%E5%AE%88%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E5%85%A5%E5%AD%B8%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%EF%BC%9A%E5%9C%8B%E6%96%8760936-60936.htm",
+      "Chinese_cmu_100": "https://yamol.tw/exam-100%E5%B9%B4++%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E5%9C%8B%E6%96%87%E8%80%83%E5%8D%B722312-22312.htm",
+      "Chinese_cmu_99": "https://yamol.tw/exam-99%E5%B9%B4++%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E5%9C%8B%E6%96%87%E8%80%83%E5%8D%B722306-22306.htm",
+      "Chinese_cmu_98": "https://yamol.tw/exam-98%E5%B9%B4++%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E5%9C%8B%E6%96%87%E8%80%83%E5%8D%B722305-22305.htm",
+      "Chinese_cmu_97": "https://yamol.tw/exam-97%E5%B9%B4++%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E5%9C%8B%E6%96%87%E8%80%83%E5%8D%B722141-22141.htm",
+      "Chinese_cmu_95": "https://yamol.tw/exam-95%E5%B9%B4++95+%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E8%A9%A6%E9%A1%8C%EF%BC%9A%E5%9C%8B%E6%96%87137182-137182.htm",
+      "Chinese_cmu_94": "https://yamol.tw/exam-94%E5%B9%B4++%5B%E9%9D%9E%E5%AE%98%E6%96%B9%E6%AD%A3%E8%A7%A3%5D94+%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E5%85%A5%E5%AD%B8%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E5%9C%8B%E6%96%871226-122689.htm",
+      "Chinese_cmu_93": "https://yamol.tw/exam-93%E5%B9%B4++93+%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E8%A9%A6%E9%A1%8C%EF%BC%9A%E5%9C%8B%E6%96%87137181-137181.htm",
+      "Chinese_cmu_92": "https://yamol.tw/exam-92%E5%B9%B4++92+%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%AD%B8%E9%99%A2_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E8%A9%A6%E9%A1%8C%EF%BC%9A%E5%9C%8B%E6%96%87137816-137816.htm",
+      "Chinese_cmu_91": "https://yamol.tw/exam-91%E5%B9%B4++91+%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%AD%B8%E9%99%A2_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E8%A9%A6%E9%A1%8C%EF%BC%9A%E5%9C%8B%E6%96%87%E7%A7%91137414-137414.htm",
+
+      // 英文 (English)
+      "English_cmu_115": "https://yamol.tw/exam-115%E5%B9%B4++115+%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E5%85%A5%E5%AD%B8%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E8%A9%A6%E9%A1%8C%EF%BC%9A%E8%8B%B1%E6%96%87138850-138850.htm",
+      "English_tzu_115": "https://yamol.tw/exam-115%E5%B9%B4++115+%E6%85%88%E6%BF%9F%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E8%A9%A6%E9%A1%8C%EF%BC%9A%E8%8B%B1%E6%96%87%E7%A7%91138632-138632.htm",
+      "English_isu_115": "https://yamol.tw/exam-115%E5%B9%B4++115+%E7%BE%A9%E5%AE%88%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E5%85%A5%E5%AD%B8%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%EF%BC%9A%E8%8B%B1%E6%96%87138216-138216.htm",
+      "English_nsysu_115": "https://yamol.tw/exam-115%E5%B9%B4++115+%E5%9C%8B%E7%AB%8B%E4%B8%AD%E5%B1%B1%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E9%86%AB%E5%AD%B8%E7%B3%BB%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E8%A9%A6%E9%A1%8C%EF%BC%9A%E8%8B%B1%E6%96%87138398-138398.htm",
+      "English_kmu_115": "https://yamol.tw/exam-115%E5%B9%B4++115+%E9%AB%98%E9%9B%84%E9%86%AB%E5%AD%B8%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E9%86%AB%E5%AD%B8%E7%B3%BB%E6%8B%9B%E7%94%9F%E7%AD%86%E8%A9%A6%EF%B9%95%E8%8B%B1%E6%96%87138386-138386.htm",
+      "English_nthu_115": "https://yamol.tw/exam-115%E5%B9%B4++115+%E5%9C%8B%E7%AB%8B%E6%B8%85%E8%8F%AF%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E9%86%AB%E5%AD%B8%E7%B3%BB%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E8%A9%A6%E9%A1%8C_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E9%86%AB%E5%AD%B8%E7%B3%BB%EF%BC%9A%E8%8B%B1%E6%96%871-138210.htm",
+      "English_tzu_114": "https://yamol.tw/exam-114%E5%B9%B4++114+%E6%85%88%E6%BF%9F%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E8%A9%A6%E9%A1%8C%EF%BC%9A%E8%8B%B1%E6%96%87%E7%A7%91126810-126810.htm",
+      "English_isu_114": "https://yamol.tw/exam-114%E5%B9%B4++114+%E7%BE%A9%E5%AE%88%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E5%85%A5%E5%AD%B8%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E8%A9%A6%E9%A1%8C%EF%BC%9A%E8%8B%B1%E6%96%87126424-126424.htm",
+      "English_cmu_114": "https://yamol.tw/exam-114%E5%B9%B4++114+%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E5%85%A5%E5%AD%B8%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%EF%BC%9A%E8%8B%B1%E6%96%87126245-126245.htm",
+      "English_nthu_114": "https://yamol.tw/exam-114%E5%B9%B4++114+%E5%9C%8B%E7%AB%8B%E6%B8%85%E8%8F%AF%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E9%86%AB%E5%AD%B8%E7%B3%BB%E5%96%AE%E6%8B%9B%E8%A9%A6%E9%A1%8C_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E9%86%AB%E5%AD%B8%E7%B3%BB%E8%87%AA%E7%84%B6%E7%A7%91%E5%AD%B8%E7%B5%84%EF%BC%9A-126267.htm",
+      "English_nsysu_114": "https://yamol.tw/exam-114%E5%B9%B4++114+%E5%9C%8B%E7%AB%8B%E4%B8%AD%E5%B1%B1%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E9%86%AB%E5%AD%B8%E7%B3%BB%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E8%A9%A6%E9%A1%8C%EF%BC%9A%E8%8B%B1%E6%96%87126246-126246.htm",
+      "English_cmu_113": "https://yamol.tw/exam-113%E5%B9%B4++113+%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E8%A9%A6%E9%A1%8C%EF%BC%9A%E8%8B%B1%E6%96%87%E7%A7%91121589-121589.htm",
+      "English_tzu_113": "https://yamol.tw/exam-113%E5%B9%B4++113+%E6%85%88%E6%BF%9F%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E8%A9%A6%E9%A1%8C%EF%BC%9A%E8%8B%B1%E6%96%87%E7%A7%91119355-119355.htm",
+      "English_isu_113": "https://yamol.tw/exam-113%E5%B9%B4++113+%E7%BE%A9%E5%AE%88%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E5%85%A5%E5%AD%B8%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E8%A9%A6%E9%A1%8C%EF%BC%9A%E8%8B%B1%E6%96%87119299-119299.htm",
+      "English_nthu_113": "https://yamol.tw/exam-113%E5%B9%B4++113+%E5%9C%8B%E7%AB%8B%E6%B8%85%E8%8F%AF%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E9%86%AB%E5%AD%B8%E7%B3%BB%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E8%A9%A6%E9%A1%8C_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E9%86%AB%E5%AD%B8%E7%B3%BB%EF%BC%9A%E8%8B%B1%E6%96%871-119873.htm",
+      "English_nsysu_113": "https://yamol.tw/exam-113%E5%B9%B4++113+%E5%9C%8B%E7%AB%8B%E4%B8%AD%E5%B1%B1%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E9%86%AB%E5%AD%B8%E7%B3%BB%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%EF%BC%9A%E8%8B%B1%E6%96%87119264-119264.htm",
+      "English_cmu_112": "https://yamol.tw/exam-112%E5%B9%B4++112+%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E5%85%A5%E5%AD%B8%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E8%A9%A6%E9%A1%8C%EF%BC%9A%E8%8B%B1%E6%96%8711414-114145.htm",
+      "English_tzu_112": "https://yamol.tw/exam-112%E5%B9%B4++112+%E6%85%88%E6%BF%9F%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%EF%BC%9A%E8%8B%B1%E6%96%87114165-114165.htm",
+      "English_isu_112": "https://yamol.tw/exam-112%E5%B9%B4++112+%E7%BE%A9%E5%AE%88%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E5%85%A5%E5%AD%B8%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E8%A9%A6%E9%A1%8C%EF%BC%9A%E8%8B%B1%E6%96%87113716-113716.htm",
+      "English_nthu_112": "https://yamol.tw/exam-112%E5%B9%B4+++112+%E5%9C%8B%E7%AB%8B%E6%B8%85%E8%8F%AF%E5%A4%A7%E5%AD%B8%E5%AD%B8%E5%A3%AB%E5%BE%8C%E8%A5%BF%E9%86%AB%E5%AD%B8%E7%B3%BB%E5%96%AE%E7%8D%A8%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E9%86%AB%E5%AD%B8%E7%B3%BB%E8%87%AA%E7%84%B6%E7%A7%91-113619.htm",
+      "English_nsysu_112": "https://yamol.tw/exam-112%E5%B9%B4++112+%E5%9C%8B%E7%AB%8B%E4%B8%AD%E5%B1%B1%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E9%86%AB%E5%AD%B8%E7%B3%BB%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%EF%BC%9A%E8%8B%B1%E6%96%87113589-113589.htm",
+      "English_tzu_111": "https://yamol.tw/exam-111%E5%B9%B4++111+%E6%85%88%E6%BF%9F%E5%A4%A7%E5%AD%B8%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%EF%BC%9A%E8%8B%B1%E6%96%87107710-107710.htm",
+      "English_cmu_111": "https://yamol.tw/exam-111%E5%B9%B4++111+%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E5%85%A5%E5%AD%B8%E8%80%83%E8%A9%A6%EF%BC%9A%E8%8B%B1%E6%96%87107610-107610.htm",
+      "English_isu_111": "https://yamol.tw/exam-111%E5%B9%B4++111+%E7%BE%A9%E5%AE%88%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB+%E5%85%A5%E5%AD%B8%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E8%A9%A6%E9%A1%8C%EF%BC%9A%E8%8B%B1%E6%96%87107317-107317.htm",
+      "English_nsysu_111": "https://yamol.tw/exam-111%E5%B9%B4++111+%E5%9C%8B%E7%AB%8B%E4%B8%AD%E5%B1%B1%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E9%86%AB%E5%AD%B8%E7%B3%BB%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%EF%BC%9A%E8%8B%B1%E6%96%87113522-113522.htm",
+      "English_nthu_111": "https://yamol.tw/exam-111%E5%B9%B4++111+%E5%9C%8B%E7%AB%8B%E6%B8%85%E8%8F%AF%E5%A4%A7%E5%AD%B8%E5%AD%B8%E5%A3%AB%E5%BE%8C%E8%A5%BF%E9%86%AB%E5%AD%B8%E7%B3%BB%E5%96%AE%E7%8D%A8%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E9%86%AB%E5%AD%B8%E7%B3%BB%E8%87%AA%E7%84%B6%E7%A7%91%E5%AD%B8-110531.htm",
+      "English_tzu_110": "https://yamol.tw/exam-110%E5%B9%B4++110+%E6%85%88%E6%BF%9F%E5%A4%A7%E5%AD%B8%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%EF%BC%9A%E8%8B%B1%E6%96%87100444-100444.htm",
+      "English_isu_110": "https://yamol.tw/exam-110%E5%B9%B4++110+%E7%BE%A9%E5%AE%88%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E5%85%A5%E5%AD%B8%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E8%A9%A6%E9%A1%8C%EF%B8%B0%E8%8B%B1%E6%96%87100235-100235.htm",
+      "English_cmu_110": "https://yamol.tw/exam-110%E5%B9%B4++%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8+110+%E5%AD%B8%E5%B9%B4%E5%BA%A6%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E5%85%A5%E5%AD%B8%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E8%8B%B1%E6%96%87%E8%A9%A6%E9%A1%8C100-100037.htm",
+      "English_isu_109": "https://yamol.tw/exam-109%E5%B9%B4++109+%E7%BE%A9%E5%AE%88%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E5%85%A5%E5%AD%B8%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%EF%BC%9A%E8%8B%B1%E6%96%8787430-87430.htm",
+      "English_tzu_109": "https://yamol.tw/exam-109%E5%B9%B4++109+%E6%85%88%E6%BF%9F%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E8%A9%A6%E9%A1%8C%EF%BC%9A%E8%8B%B1%E6%96%8786271-86271.htm",
+      "English_kmu_109": "https://yamol.tw/exam-109%E5%B9%B4++109+%E9%AB%98%E9%9B%84%E9%86%AB%E5%AD%B8%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E9%86%AB%E5%AD%B8%E7%B3%BB%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%EF%BC%9A%E8%8B%B1%E6%96%8786941-86941.htm",
+      "English_cmu_109": "https://yamol.tw/exam-109%E5%B9%B4++109+%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%EF%BC%9A%E8%8B%B1%E6%96%8785823-85823.htm",
+      "English_isu_108": "https://yamol.tw/exam-108%E5%B9%B4++108+%E7%BE%A9%E5%AE%88%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E5%85%A5%E5%AD%B8%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E8%A9%A6%E9%A1%8C%EF%BC%9A%E8%8B%B1%E6%96%8777129-77129.htm",
+      "English_tzu_108": "https://yamol.tw/exam-108%E5%B9%B4++108+%E6%85%88%E6%BF%9F%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E8%A9%A6%E9%A1%8C%EF%BC%9A%E8%8B%B1%E6%96%8776353-76353.htm",
+      "English_cmu_108": "https://yamol.tw/exam-108%E5%B9%B4++%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E8%8B%B1%E6%96%8776051-76051.htm",
+      "English_cmu_107": "https://yamol.tw/exam-107%E5%B9%B4++107+%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E5%85%A5%E5%AD%B8%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%EF%BC%9A%E8%8B%B1%E6%96%87133444-133444.htm",
+      "English_tzu_107": "https://yamol.tw/exam-107%E5%B9%B4++107+%E6%85%88%E6%BF%9F%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E8%A9%A6%E9%A1%8C%EF%BC%9A%E8%8B%B1%E6%96%8769843-69843.htm",
+      "English_isu_107": "https://yamol.tw/exam-107%E5%B9%B4++107+%E7%BE%A9%E5%AE%88%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E5%85%A5%E5%AD%B8%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E8%A9%A6%E9%A1%8C%EF%BC%9A%E8%8B%B1%E6%96%8769816-69816.htm",
+      "English_cmu_106": "https://yamol.tw/exam-106%E5%B9%B4++%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8+%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E8%8B%B1%E6%96%87%E8%A9%A6%E9%A1%8C69404-69404.htm",
+      "English_isu_106": "https://yamol.tw/exam-106%E5%B9%B4++106+%E7%BE%A9%E5%AE%88%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E5%85%A5%E5%AD%B8%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E8%A9%A6%E9%A1%8C%EF%BC%9A%E8%8B%B1%E6%96%8769329-69329.htm",
+      "English_tzu_106": "https://yamol.tw/exam-106%E5%B9%B4++106+%E6%85%88%E6%BF%9F%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E8%A9%A6%E9%A1%8C%EF%BC%9A%E8%8B%B1%E6%96%8762608-62608.htm",
+      "English_cmu_105": "https://yamol.tw/exam-105%E5%B9%B4++%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8+%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB+%E8%8B%B1%E6%96%8774651-74651.htm",
+      "English_isu_105": "https://yamol.tw/exam-105%E5%B9%B4++105+%E7%BE%A9%E5%AE%88%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E5%85%A5%E5%AD%B8%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E8%A9%A6%E9%A1%8C%EF%BC%9A%E8%8B%B1%E6%96%8769971-69971.htm",
+      "English_tzu_105": "https://yamol.tw/exam-105%E5%B9%B4++105+%E6%85%88%E6%BF%9F%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E8%A9%A6%E9%A1%8C%EF%BC%9A%E8%8B%B1%E6%96%87%E7%A7%9169924-69924.htm",
+      "English_cmu_104": "https://yamol.tw/exam-104%E5%B9%B4++104%E5%B9%B4%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8+%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB+%E8%8B%B1%E6%96%8724134-24134.htm",
+      "English_tzu_104": "https://yamol.tw/exam-104%E5%B9%B4++%E6%85%88%E6%BF%9F%E5%A4%A7%E5%AD%B8%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E8%8B%B1%E6%96%8723669-23669.htm",
+      "English_isu_104": "https://yamol.tw/exam-104%E5%B9%B4++104+%E7%BE%A9%E5%AE%88%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB+%E5%85%A5%E5%AD%B8%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E8%A9%A6%E9%A1%8C%EF%BC%9A%E8%8B%B1%E6%96%8722089-22089.htm",
+      "English_tzu_103": "https://yamol.tw/exam-103%E5%B9%B4++103%E6%85%88%E6%BF%9F%E5%A4%A7%E5%AD%B8+%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E8%8B%B1%E6%96%8727049-27049.htm",
+      "English_isu_103": "https://yamol.tw/exam-103%E5%B9%B4++103%E5%B9%B4%E7%BE%A9%E5%AE%88%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB++%E8%8B%B1%E6%96%8724090-24090.htm",
+      "English_cmu_103": "https://yamol.tw/exam-103%E5%B9%B4++%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E8%8B%B1%E6%96%8721416-21416.htm",
+      "English_tzu_102": "https://yamol.tw/exam-102%E5%B9%B4++102+%E6%85%88%E6%BF%9F%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E8%A9%A6%E9%A1%8C%EF%BC%9A%E8%8B%B1%E6%96%8727071-27071.htm",
+      "English_cmu_102": "https://yamol.tw/exam-102%E5%B9%B4++%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E8%8B%B1%E6%96%8724676-24676.htm",
+      "English_isu_102": "https://yamol.tw/exam-102%E5%B9%B4++%E7%BE%A9%E5%AE%88%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB++%E8%8B%B1%E6%96%8724382-24382.htm",
+      "English_tzu_101": "https://yamol.tw/exam-101%E5%B9%B4++101+%E6%85%88%E6%BF%9F%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E8%A9%A6%E9%A1%8C%EF%BC%9A%E8%8B%B1%E6%96%8783064-83064.htm",
+      "English_cmu_101": "https://yamol.tw/exam-101%E5%B9%B4++%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E8%8B%B1%E6%96%8724475-24475.htm",
+      "English_isu_101": "https://yamol.tw/exam-101%E5%B9%B4++%E7%BE%A9%E5%AE%88%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB++%E8%8B%B1%E6%96%8724474-24474.htm",
+      "English_isu_100": "https://yamol.tw/exam-100%E5%B9%B4++%E7%BE%A9%E5%AE%88%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB++%E8%8B%B1%E6%96%8724724-24724.htm",
+      "English_cmu_100": "https://yamol.tw/exam-100%E5%B9%B4++%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E8%8B%B1%E6%96%8724723-24723.htm",
+      "English_cmu_99": "https://yamol.tw/exam-99%E5%B9%B4++%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB99%E5%B9%B4%E8%8B%B1%E6%96%8775799-75799.htm",
+      "English_isu_99": "https://yamol.tw/exam-99%E5%B9%B4++%E7%BE%A9%E5%AE%88%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB++%E8%8B%B1%E6%96%8724734-24734.htm",
+      "English_cmu_98": "https://yamol.tw/exam-98%E5%B9%B4++98+%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8%E5%AD%B8%E5%A3%AB%E5%BE%8C%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6_%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E8%8B%B1%E6%96%8799250-99250.htm",
+      "English_cmu_97": "https://yamol.tw/exam-97%E5%B9%B4++97%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E8%A9%A6%E9%A1%8C%EF%BC%9A%E8%8B%B1%E6%96%87%E7%A7%91%EF%BC%9A%E8%8B%B1%E6%96%87122457-122457.htm",
+      "English_kmu_95": "https://yamol.tw/exam-95%E5%B9%B4++%E9%AB%98%E9%9B%84%E9%86%AB%E5%AD%B8%E5%A4%A7%E5%AD%B895%E5%AD%B8%E5%B9%B4%E5%BA%A6%E5%AD%B8%E5%A3%AB%E5%BE%8C%E9%86%AB%E5%AD%B8%E7%B3%BB%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E8%A9%A6%E9%A1%8C%E8%8B%B1%E6%96%8738216-38216.htm",
+      "English_cmu_95": "https://yamol.tw/exam-95%E5%B9%B4++95+%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E8%A9%A6%E9%A1%8C%EF%BC%9A%E8%8B%B1%E6%96%87137818-137818.htm",
+      "English_cmu_94": "https://yamol.tw/exam-94%E5%B9%B4++%5B%E9%9D%9E%E5%AE%98%E6%96%B9%E6%AD%A3%E8%A7%A3%5D94+%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E8%A9%A6%E9%A1%8C%EF%BC%9A%E8%8B%B1%E6%96%8712-122696.htm",
+      "English_cmu_93": "https://yamol.tw/exam-93%E5%B9%B4++93+%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E8%A9%A6%E9%A1%8C%EF%BC%9A%E8%8B%B1%E6%96%87137892-137892.htm",
+      "English_kmu_92": "https://yamol.tw/exam-92%E5%B9%B4++92+%E9%AB%98%E9%9B%84%E9%86%AB%E5%AD%B8%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E9%86%AB%E5%AD%B8%E7%B3%BB%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E8%A9%A6%E9%A1%8C%EF%BC%9A%E8%8B%B1%E6%96%87139377-139377.htm",
+      "English_cmu_92": "https://yamol.tw/exam-92%E5%B9%B4++92+%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E8%A9%A6%E9%A1%8C%EF%BC%9A%E8%8B%B1%E6%96%87137893-137893.htm",
+      "English_kmu_91": "https://yamol.tw/exam-91%E5%B9%B4++91+%E9%AB%98%E9%9B%84%E9%86%AB%E5%AD%B8%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E8%A5%BF%E9%86%AB%EF%BC%9A%E8%8B%B1%E6%96%8786038-86038.htm",
+      "English_cmu_91": "https://yamol.tw/exam-91%E5%B9%B4++91+%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E8%A9%A6%E9%A1%8C%EF%BC%9A%E8%8B%B1%E6%96%87138158-138158.htm",
+      "English_kmu_89": "https://yamol.tw/exam-89%E5%B9%B4++89+%E9%AB%98%E9%9B%84%E9%86%AB%E5%AD%B8%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E9%86%AB%E5%AD%B8%E7%B3%BB%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E8%A9%A6%E9%A1%8C%EF%BC%9A%E8%8B%B1%E6%96%8784739-84739.htm",
+
+      // 生物學 (Biology)
+      "Biology_cmu_115": "https://yamol.tw/exam-115%E5%B9%B4++115+%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E5%85%A5%E5%AD%B8%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E8%A9%A6%E9%A1%8C%EF%BC%9A%E7%94%9F%E7%89%A9%E5%AD%B81388-138803.htm",
+      "Biology_tzu_115": "https://yamol.tw/exam-115%E5%B9%B4++115+%E6%85%88%E6%BF%9F%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E8%A9%A6%E9%A1%8C%EF%BC%9A%E7%94%9F%E7%89%A9%E5%AD%B8%E7%A7%91138630-138630.htm",
+      "Biology_isu_115": "https://yamol.tw/exam-115%E5%B9%B4++115+%E7%BE%A9%E5%AE%88%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E5%85%A5%E5%AD%B8%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%EF%BC%9A%E7%94%9F%E7%89%A9%E5%AD%B8138217-138217.htm",
+      "Biology_tzu_114": "https://yamol.tw/exam-114%E5%B9%B4++114+%E6%85%88%E6%BF%9F%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E8%A9%A6%E9%A1%8C%EF%BC%9A%E7%94%9F%E7%89%A9%E5%AD%B8126760-126760.htm",
+      "Biology_isu_114": "https://yamol.tw/exam-114%E5%B9%B4++114+%E7%BE%A9%E5%AE%88%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E5%85%A5%E5%AD%B8%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%EF%BC%9A%E7%94%9F%E7%89%A9%E5%AD%B8126407-126407.htm",
+      "Biology_cmu_114": "https://yamol.tw/exam-114%E5%B9%B4++114+%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E5%85%A5%E5%AD%B8%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E8%A9%A6%E9%A1%8C%EF%BC%9A%E7%94%9F%E7%89%A9%E5%AD%B81262-126220.htm",
+      "Biology_nthu_114": "https://yamol.tw/exam-114%E5%B9%B4++114+%E5%9C%8B%E7%AB%8B%E6%B8%85%E8%8F%AF%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E9%86%AB%E5%AD%B8%E7%B3%BB%E8%80%83%E8%A9%A6%EF%B8%B0%E7%94%9F%E7%89%A9%E7%94%9F%E5%8C%96126232-126232.htm",
+      "Biology_cmu_113": "https://yamol.tw/exam-113%E5%B9%B4++113+%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E8%A9%A6%E9%A1%8C%EF%BC%9A%E7%94%9F%E7%89%A9%E7%A7%91121588-121588.htm",
+      "Biology_tzu_113": "https://yamol.tw/exam-113%E5%B9%B4++113+%E6%85%88%E6%BF%9F%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E8%A9%A6%E9%A1%8C%EF%BC%9A%E7%94%9F%E7%89%A9%E7%A7%91119348-119348.htm",
+      "Biology_isu_113": "https://yamol.tw/exam-113%E5%B9%B4++113+%E7%BE%A9%E5%AE%88%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E5%85%A5%E5%AD%B8%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E8%A9%A6%E9%A1%8C%EF%BC%9A%E7%94%9F%E7%89%A9%E5%AD%B8+%28%E5%90%AB%E7%94%9F%E7%90%86%E5%AD%B8-119294.htm",
+      "Biology_tzu_112": "https://yamol.tw/exam-112%E5%B9%B4++112+%E6%85%88%E6%BF%9F%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%EF%BC%9A%E7%94%9F%E7%89%A9%E5%AD%B8114188-114188.htm",
+      "Biology_cmu_112": "https://yamol.tw/exam-112%E5%B9%B4++112+%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E5%85%A5%E5%AD%B8%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E8%A9%A6%E9%A1%8C%EF%BC%9A%E7%94%9F%E7%89%A9%E5%AD%B81141-114123.htm",
+      "Biology_isu_112": "https://yamol.tw/exam-112%E5%B9%B4++112+%E7%BE%A9%E5%AE%88%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E5%85%A5%E5%AD%B8%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E8%A9%A6%E9%A1%8C%EF%BC%9A%E7%94%9F%E7%89%A9%E5%AD%B8+%28%E5%90%AB%E7%94%9F%E7%90%86%E5%AD%B8-113709.htm",
+      "Biology_tzu_111": "https://yamol.tw/exam-111%E5%B9%B4++111+%E6%85%88%E6%BF%9F%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%EF%BC%9A%E7%94%9F%E7%89%A9107673-107673.htm",
+      "Biology_cmu_111": "https://yamol.tw/exam-111%E5%B9%B4++111+%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E5%85%A5%E5%AD%B8%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%EF%BC%9A%E7%94%9F%E7%89%A9107437-107437.htm",
+      "Biology_isu_111": "https://yamol.tw/exam-111%E5%B9%B4++111+%E7%BE%A9%E5%AE%88%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E5%85%A5%E5%AD%B8%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E8%A9%A6%E9%A1%8C%EF%BC%9A%E7%94%9F%E7%89%A9%E5%AD%B8+%28%E5%90%AB%E7%94%9F%EF%A7%A4%E5%AD%B8-107313.htm",
+      "Biology_tzu_110": "https://yamol.tw/exam-110%E5%B9%B4++110+%E6%85%88%E6%BF%9F%E5%A4%A7%E5%AD%B8%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%EF%BC%9A%E7%94%9F%E7%89%A9100441-100441.htm",
+      "Biology_isu_110": "https://yamol.tw/exam-110%E5%B9%B4++110%E7%BE%A9%E5%AE%88%E5%A4%A7%E5%AD%B8%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB+%E7%94%9F%E7%89%A9%E7%A7%91100233-100233.htm",
+      "Biology_cmu_110": "https://yamol.tw/exam-110%E5%B9%B4++110+%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E5%85%A5%E5%AD%B8%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%EF%BC%9A%E7%94%9F%E7%89%A9%E5%AD%B8100002-100002.htm",
+      "Biology_isu_109": "https://yamol.tw/exam-109%E5%B9%B4++109+%E7%BE%A9%E5%AE%88%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E5%85%A5%E5%AD%B8%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E8%A9%A6%E9%A1%8C%EF%BC%9A%E7%94%9F%E7%89%A9%E5%AD%B8+%28%E5%90%AB%E7%94%9F%EF%A7%A4%E5%AD%B8-87429.htm",
+      "Biology_tzu_109": "https://yamol.tw/exam-109%E5%B9%B4++109+%E6%85%88%E6%BF%9F%E5%A4%A7%E5%AD%B8+_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E6%8B%9B%E7%94%9F%EF%BC%9A%E7%94%9F%E7%89%A986272-86272.htm",
+      "Biology_cmu_109": "https://yamol.tw/exam-109%E5%B9%B4++109+%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8+%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E5%85%A5%E5%AD%B8%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%EF%BC%9A%E7%94%9F%E7%89%A9%E5%AD%B885696-85696.htm",
+      "Biology_isu_108": "https://yamol.tw/exam-108%E5%B9%B4++%E7%BE%A9%E5%AE%88%E5%A4%A7%E5%AD%B8108+%E5%AD%B8%E5%B9%B4%E5%BA%A6%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E7%94%9F%E7%89%A9%E5%AD%B877124-77124.htm",
+      "Biology_tzu_108": "https://yamol.tw/exam-108%E5%B9%B4++108%E5%B9%B4++%E6%85%88%E6%BF%9F%E5%A4%A7%E5%AD%B8+108+%E5%AD%B8%E5%B9%B4%E5%BA%A6%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E7%94%9F%E7%89%A9%E5%AD%B876-76351.htm",
+      "Biology_cmu_108": "https://yamol.tw/exam-108%E5%B9%B4++%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8108%E5%AD%B8%E5%B9%B4%E5%BA%A6+%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E5%85%A5%E5%AD%B8%E6%8B%9B%E7%94%9F%E7%94%9F%E7%89%A9%E5%AD%B876044-76044.htm",
+      "Biology_tzu_107": "https://yamol.tw/exam-107%E5%B9%B4++%E6%85%88%E6%BF%9F%E5%A4%A7%E5%AD%B8+107+%E5%AD%B8%E5%B9%B4%E5%BA%A6%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E7%94%9F%E7%89%A969811-69811.htm",
+      "Biology_isu_107": "https://yamol.tw/exam-107%E5%B9%B4++%E7%BE%A9%E5%AE%88%E5%A4%A7%E5%AD%B8+107+%E5%AD%B8%E5%B9%B4%E5%BA%A6+%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB+%E5%85%A5%E5%AD%B8%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E8%A9%A6%E9%A1%8C%E7%94%9F%E7%89%A9697-69796.htm",
+      "Biology_cmu_107": "https://yamol.tw/exam-107%E5%B9%B4++%E4%B8%AD%E5%9C%8B%E9%86%AB%E5%BE%8C%E4%B8%AD%E9%86%AB+%E7%94%9F%E7%89%A9%E5%AD%B869150-69150.htm",
+      "Biology_isu_106": "https://yamol.tw/exam-106%E5%B9%B4++%E7%BE%A9%E5%AE%88%E5%A4%A7%E5%AD%B8%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E7%94%9F%E7%89%A969919-69919.htm",
+      "Biology_cmu_106": "https://yamol.tw/exam-106%E5%B9%B4++106+%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E5%85%A5%E5%AD%B8%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%EF%BC%9A%E7%94%9F%E7%89%A9%E5%AD%B869918-69918.htm",
+      "Biology_tzu_106": "https://yamol.tw/exam-106%E5%B9%B4++%E6%85%88%E6%BF%9F%E5%A4%A7%E5%AD%B8+10%EF%BC%96+%E5%AD%B8%E5%B9%B4%E5%BA%A6%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E7%94%9F%E7%89%A962606-62606.htm",
+      "Biology_isu_105": "https://yamol.tw/exam-105%E5%B9%B4++%E7%BE%A9%E5%AE%88%E5%A4%A7%E5%AD%B8%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E7%94%9F%E7%89%A969925-69925.htm",
+      "Biology_tzu_105": "https://yamol.tw/exam-105%E5%B9%B4++105+%E6%85%88%E6%BF%9F%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E8%A9%A6%E9%A1%8C%EF%BC%9A%E7%94%9F%E7%89%A9%E5%AD%B860296-60296.htm",
+      "Biology_cmu_105": "https://yamol.tw/exam-105%E5%B9%B4++%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB55150-55150.htm",
+      "Biology_cmu_104": "https://yamol.tw/exam-104%E5%B9%B4++%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8+%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB++%E7%94%9F%E7%89%A9%E5%AD%B824110-24110.htm",
+      "Biology_tzu_104": "https://yamol.tw/exam-104%E5%B9%B4++%E6%85%88%E6%BF%9F%E5%A4%A7%E5%AD%B8%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E7%94%9F%E7%89%A923667-23667.htm",
+      "Biology_isu_104": "https://yamol.tw/exam-104%E5%B9%B4++%E7%BE%A9%E5%AE%88%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E7%94%9F%E7%89%A9%E5%AD%B8%E3%80%81%E7%94%9F%E7%90%86%E5%AD%B822066-22066.htm",
+      "Biology_tzu_103": "https://yamol.tw/exam-103%E5%B9%B4++%E6%85%88%E6%BF%9F%E5%BE%8C%E4%B8%AD%E9%86%AB%E7%94%9F%E7%89%A982477-82477.htm",
+      "Biology_cmu_103": "https://yamol.tw/exam-103%E5%B9%B4+++%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E7%94%9F%E7%89%A924089-24089.htm",
+      "Biology_isu_103": "https://yamol.tw/exam-103%E5%B9%B4++%E7%BE%A9%E5%AE%88%E5%A4%A7%E5%AD%B8%E5%BE%8C%E4%B8%AD%E9%86%AB%E7%94%9F%E7%89%A9%E5%AD%B8%28%E7%94%9F%E7%90%86%E5%AD%B8%2924063-24063.htm",
+      "Biology_isu_102": "https://yamol.tw/exam-102%E5%B9%B4++%E7%BE%A9%E5%AE%88%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB60975-60975.htm",
+      "Biology_tzu_102": "https://yamol.tw/exam-102%E5%B9%B4++102%E6%85%88%E6%BF%9F%E5%A4%A7%E5%AD%B8+%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E7%94%9F%E7%89%A9%E5%AD%B827057-27057.htm",
+      "Biology_cmu_102": "https://yamol.tw/exam-102%E5%B9%B4++%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E7%94%9F%E7%89%A924397-24397.htm",
+      "Biology_tzu_101": "https://yamol.tw/exam-101%E5%B9%B4++%E6%85%88%E6%BF%9F%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%EF%BC%9A%E7%94%9F%E7%89%A953759-53759.htm",
+      "Biology_cmu_101": "https://yamol.tw/exam-101%E5%B9%B4++%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E7%94%9F%E7%89%A924542-24542.htm",
+      "Biology_isu_101": "https://yamol.tw/exam-101%E5%B9%B4++%E7%BE%A9%E5%AE%88%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E7%94%9F%E7%89%A9%E5%AD%B8%E3%80%81%E7%94%9F%E7%90%86%E5%AD%B824469-24469.htm",
+      "Biology_isu_100": "https://yamol.tw/exam-100%E5%B9%B4++%E7%BE%A9%E5%AE%88%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E7%94%9F%E7%89%A9%E5%AD%B8%E3%80%81%E7%94%9F%E7%90%86%E5%AD%B824696-24696.htm",
+      "Biology_cmu_100": "https://yamol.tw/exam-100%E5%B9%B4++100+%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E7%94%9F%E7%89%A9%E5%AD%B8+23248-23248.htm",
+      "Biology_cmu_99": "https://yamol.tw/exam-99%E5%B9%B4++%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB99%E5%B9%B4%E7%94%9F%E7%89%A975423-75423.htm",
+      "Biology_isu_99": "https://yamol.tw/exam-99%E5%B9%B4++%E7%BE%A9%E5%AE%88%E5%A4%A7%E5%AD%B8%E5%BE%8C%E4%B8%AD%E9%86%AB%E7%94%9F%E7%89%A9%E5%AD%B8%28%E7%94%9F%E7%90%86%E5%AD%B8%2924715-24715.htm",
+      "Biology_cmu_98": "https://yamol.tw/exam-98%E5%B9%B4++98+%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E7%94%9F%E7%89%A9%E5%AD%B898561-98561.htm",
+      "Biology_cmu_96": "https://yamol.tw/exam-96%E5%B9%B4++%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8+96%E5%AD%B8%E5%B9%B4%E5%BA%A6%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E6%99%AE%E9%80%9A%E7%94%9F%E7%89%A9%E5%AD%B875995-75995.htm",
+      "Biology_cmu_95": "https://yamol.tw/exam-95%E5%B9%B4++%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8+95%E5%AD%B8%E5%B9%B4%E5%BA%A6%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E6%99%AE%E9%80%9A%E7%94%9F%E7%89%A9%E5%AD%B875994-75994.htm",
+      "Biology_cmu_94": "https://yamol.tw/exam-94%E5%B9%B4++%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B894%E5%AD%B8%E5%B9%B4%E5%BA%A6+%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E5%85%A5%E5%AD%B8%E6%8B%9B%E7%94%9F%E7%94%9F%E7%89%A9%E5%AD%B884003-84003.htm",
+      "Biology_cmu_93": "https://yamol.tw/exam-93%E5%B9%B4++93+%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E8%A9%A6%E9%A1%8C%EF%BC%9A%E7%94%9F%E7%89%A9%E5%AD%B8120771-120771.htm",
+      "Biology_cmu_92": "https://yamol.tw/exam-92%E5%B9%B4++92%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E8%A9%A6%E9%A1%8C%EF%BC%9A%E7%94%9F%E7%89%A9%E7%A7%91127813-127813.htm",
+      "Biology_cmu_91": "https://yamol.tw/exam-91%E5%B9%B4++91+%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%AD%B8%E9%99%A2_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E8%A9%A6%E9%A1%8C%EF%BC%9A%E7%94%9F%E7%89%A9%E7%A7%91137817-137817.htm",
+      "Biology_cmu_90": "https://yamol.tw/exam-90%E5%B9%B4++90+%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%AD%B8%E9%99%A2_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%EF%BC%9A%E7%94%9F%E7%89%A9%E5%AD%B8134839-134839.htm",
+
+      // 化學/有機化學 (Chemistry)
+      "Chemistry_cmu_115": "https://yamol.tw/exam-115%E5%B9%B4++115+%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E5%85%A5%E5%AD%B8%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E8%A9%A6%E9%A1%8C%EF%BC%9A%E5%8C%96%E5%AD%B8138810-138810.htm",
+      "Chemistry_tzu_115": "https://yamol.tw/exam-115%E5%B9%B4++115+%E6%85%88%E6%BF%9F%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%EF%BC%9A%E5%8C%96%E5%AD%B8%E7%A7%91138658-138658.htm",
+      "Chemistry_isu_115": "https://yamol.tw/exam-115%E5%B9%B4++115++%E7%BE%A9%E5%AE%88%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E5%85%A5%E5%AD%B8%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%EF%BC%9A%E5%8C%96%E5%AD%B8+%28%E5%90%AB%E6%99%AE%E9%80%9A%E5%8C%96%E5%AD%B8%E3%80%81-138215.htm",
+      "Chemistry_tzu_114": "https://yamol.tw/exam-114%E5%B9%B4++114+%E6%85%88%E6%BF%9F%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E8%A9%A6%E9%A1%8C%EF%BC%9A%E5%8C%96%E5%AD%B8%E7%A7%91126734-126734.htm",
+      "Chemistry_isu_114": "https://yamol.tw/exam-114%E5%B9%B4++114+%E7%BE%A9%E5%AE%88%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E5%85%A5%E5%AD%B8%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E8%A9%A6%E9%A1%8C%EF%BC%9A%E5%8C%96%E5%AD%B8+%28%E5%90%AB%E6%99%AE%E9%80%9A%E5%8C%96%E5%AD%B8-126420.htm",
+      "Chemistry_cmu_114": "https://yamol.tw/exam-114%E5%B9%B4++%5B%E9%9D%9E%E5%AE%98%E6%96%B9%E6%AD%A3%E8%A7%A3%5D114+%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E5%85%A5%E5%AD%B8%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%EF%BC%9A%E5%8C%96%E5%AD%B8-126227.htm",
+      "Chemistry_cmu_113": "https://yamol.tw/exam-113%E5%B9%B4++113+%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E5%85%A5%E5%AD%B8%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E8%A9%A6%E9%A1%8C%EF%BC%9A%E5%8C%96%E5%AD%B812156-121562.htm",
+      "Chemistry_tzu_113": "https://yamol.tw/exam-113%E5%B9%B4++113+%E6%85%88%E6%BF%9F%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E8%A9%A6%E9%A1%8C%EF%BC%9A%E5%8C%96%E5%AD%B8%E7%A7%91119521-119521.htm",
+      "Chemistry_isu_113": "https://yamol.tw/exam-113%E5%B9%B4++113+%E7%BE%A9%E5%AE%88%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E5%85%A5%E5%AD%B8%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E8%A9%A6%E9%A1%8C%EF%BC%9A%E5%8C%96%E5%AD%B8+%28%E5%90%AB%E6%99%AE%E9%80%9A%E5%8C%96%E5%AD%B8-119296.htm",
+      "Chemistry_nsysu_113": "https://yamol.tw/exam-113%E5%B9%B4++113+%E5%9C%8B%E7%AB%8B%E4%B8%AD%E5%B1%B1%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E9%86%AB%E5%AD%B8%E7%B3%BB%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%EF%BC%9A%E7%89%A9%E7%90%86%E5%8F%8A%E5%8C%96%E5%AD%B8119273-119273.htm",
+      "Chemistry_tzu_112": "https://yamol.tw/exam-112%E5%B9%B4++112+%E6%85%88%E6%BF%9F%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%EF%BC%9A%E5%8C%96%E5%AD%B8114232-114232.htm",
+      "Chemistry_cmu_112": "https://yamol.tw/exam-112%E5%B9%B4++112+%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E5%85%A5%E5%AD%B8%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E8%A9%A6%E9%A1%8C%EF%BC%9A%E5%8C%96%E5%AD%B811410-114106.htm",
+      "Chemistry_isu_112": "https://yamol.tw/exam-112%E5%B9%B4++112+%E7%BE%A9%E5%AE%88%E5%A4%A7%E5%AD%B8_%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E5%85%A5%E5%AD%B8%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E8%A9%A6%E9%A1%8C%EF%BC%9A%E5%8C%96%E5%AD%B8+%28%E5%90%AB%E6%99%AE%E9%80%9A%E5%8C%96%E5%AD%B8%E3%80%81-113712.htm",
+      "Chemistry_tzu_111": "https://yamol.tw/exam-111%E5%B9%B4++111+%E6%85%88%E6%BF%9F%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E9%A1%8C%EF%BC%9A%E5%8C%96%E5%AD%B8107670-107670.htm",
+      "Chemistry_cmu_111": "https://yamol.tw/exam-111%E5%B9%B4++111+%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E5%85%A5%E5%AD%B8%E8%80%83%E8%A9%A6%EF%BC%9A%E5%8C%96%E5%AD%B8107436-107436.htm",
+      "Chemistry_isu_111": "https://yamol.tw/exam-111%E5%B9%B4++111+%E7%BE%A9%E5%AE%88%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E5%85%A5%E5%AD%B8%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E8%A9%A6%E9%A1%8C%EF%BC%9A%E5%8C%96%E5%AD%B8+%28%E5%90%AB%E6%99%AE%E9%80%9A%E5%8C%96%E5%AD%B8-107314.htm",
+      "Chemistry_nthu_111": "https://yamol.tw/exam-111%E5%B9%B4++111+%E5%9C%8B%E7%AB%8B%E6%B8%85%E8%8F%AF%E5%A4%A7%E5%AD%B8%E5%AD%B8%E5%A3%AB%E5%BE%8C%E8%A5%BF%E9%86%AB%E5%AD%B8%E7%B3%BB%E5%96%AE%E7%8D%A8%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E9%86%AB%E5%AD%B8%E7%B3%BB%E8%87%AA%E7%84%B6%E7%A7%91%E5%AD%B8-110532.htm",
+      "Chemistry_tzu_110": "https://yamol.tw/exam-110%E5%B9%B4++110+%E6%85%88%E6%BF%9F%E5%A4%A7%E5%AD%B8%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%EF%BC%9A%E5%8C%96%E5%AD%B8100446-100446.htm",
+      "Chemistry_isu_110": "https://yamol.tw/exam-110%E5%B9%B4++110+%E7%BE%A9%E5%AE%88%E5%A4%A7%E5%AD%B8%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB+%E5%8C%96%E5%AD%B8%E7%A7%91100234-100234.htm",
+      "Chemistry_cmu_110": "https://yamol.tw/exam-110%E5%B9%B4++110+%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E8%A9%A6%E9%A1%8C%EF%BC%9A%E5%8C%96%E5%AD%B8100003-100003.htm",
+      "Chemistry_isu_109": "https://yamol.tw/exam-109%E5%B9%B4++109+%E7%BE%A9%E5%AE%88%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E5%85%A5%E5%AD%B8%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%EF%BC%9A%E5%8C%96%E5%AD%B8%EF%BC%88%E5%90%AB%E6%99%AE%E9%80%9A%E5%8C%96%E5%AD%B8%E3%80%81%E6%9C%89%E6%A9%9F-87431.htm",
+      "Chemistry_tzu_109": "https://yamol.tw/exam-109%E5%B9%B4++109+%E6%85%88%E6%BF%9F%E5%A4%A7%E5%AD%B8+_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E6%8B%9B%E7%94%9F%EF%BC%9A%E5%8C%96%E5%AD%B886273-86273.htm",
+      "Chemistry_cmu_109": "https://yamol.tw/exam-109%E5%B9%B4++109+%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8+%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E5%85%A5%E5%AD%B8%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%EF%BC%9A%E5%8C%96%E5%AD%B885695-85695.htm",
+      "Chemistry_isu_108": "https://yamol.tw/exam-108%E5%B9%B4++%E7%BE%A9%E5%AE%88%E5%A4%A7%E5%AD%B8108+%E5%AD%B8%E5%B9%B4%E5%BA%A6%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E5%8C%96%E5%AD%B8+%28%E5%90%AB%E6%99%AE%E9%80%9A%E5%8C%96%E5%AD%B8%E3%80%81%E6%9C%89%E6%A9%9F-77125.htm",
+      "Chemistry_tzu_108": "https://yamol.tw/exam-108%E5%B9%B4++108%E5%B9%B4++%E6%85%88%E6%BF%9F%E5%A4%A7%E5%AD%B8+108+%E5%AD%B8%E5%B9%B4%E5%BA%A6%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E5%8C%96%E5%AD%B8763-76348.htm",
+      "Chemistry_cmu_108": "https://yamol.tw/exam-108%E5%B9%B4++%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8108%E5%AD%B8%E5%B9%B4%E5%BA%A6+%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E5%85%A5%E5%AD%B8%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E5%8C%96%E5%AD%B876046-76046.htm",
+      "Chemistry_tzu_107": "https://yamol.tw/exam-107%E5%B9%B4++%E6%85%88%E6%BF%9F%E5%A4%A7%E5%AD%B8+107+%E5%AD%B8%E5%B9%B4%E5%BA%A6%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E5%8C%96%E5%AD%B869829-69829.htm",
+      "Chemistry_isu_107": "https://yamol.tw/exam-107%E5%B9%B4++%E7%BE%A9%E5%AE%88%E5%A4%A7%E5%AD%B8+107+%E5%AD%B8%E5%B9%B4%E5%BA%A6+%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB+%E5%85%A5%E5%AD%B8%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E8%A9%A6%E9%A1%8C%E5%8C%96%E5%AD%B8698-69825.htm",
+      "Chemistry_cmu_107": "https://yamol.tw/exam-107%E5%B9%B4++%E4%B8%AD%E5%9C%8B%E9%86%AB%E5%BE%8C%E4%B8%AD+%E5%8C%96%E5%AD%B869143-69143.htm",
+      "Chemistry_tzu_106": "https://yamol.tw/exam-106%E5%B9%B4++106+%E6%85%88%E6%BF%9F%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%EF%BC%9A%E5%8C%96%E5%AD%B8%E7%A7%9175187-75187.htm",
+      "Chemistry_isu_106": "https://yamol.tw/exam-106%E5%B9%B4++%E7%BE%A9%E5%AE%88%E5%A4%A7%E5%AD%B8%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E5%8C%96%E5%AD%B8+%28%E5%90%AB%E6%99%AE%E9%80%9A%E5%8C%96%E5%AD%B8%E3%80%81%E6%9C%89%E6%A9%9F%E5%8C%96%E5%AD%B8%2969921-69921.htm",
+      "Chemistry_cmu_106": "https://yamol.tw/exam-106%E5%B9%B4++%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8+%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB+%E5%8C%96%E5%AD%B8++%E8%A9%A6%E9%A1%8C69830-69830.htm",
+      "Chemistry_tzu_105": "https://yamol.tw/exam-105%E5%B9%B4++105+%E6%85%88%E6%BF%9F%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E8%A9%A6%E9%A1%8C%EF%BC%9A%E5%8C%96%E5%AD%B8%E7%A7%9169979-69979.htm",
+      "Chemistry_cmu_105": "https://yamol.tw/exam-105%E5%B9%B4++%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8105%E5%AD%B8%E5%B9%B4%E5%BA%A6+%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%8C%96%E5%AD%B863875-63875.htm",
+      "Chemistry_isu_105": "https://yamol.tw/exam-105%E5%B9%B4++105%E7%BE%A9%E5%AE%88%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%8C%96%E5%AD%B8+%28%E5%90%AB%E6%99%AE%E9%80%9A%E5%8C%96%E5%AD%B8%E3%80%81%E6%9C%89%E6%A9%9F%E5%8C%96%E5%AD%B8%2962139-62139.htm",
+      "Chemistry_cmu_104": "https://yamol.tw/exam-104%E5%B9%B4++%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E5%8C%96%E5%AD%B824790-24790.htm",
+      "Chemistry_tzu_104": "https://yamol.tw/exam-104%E5%B9%B4++%E6%85%88%E6%BF%9F%E5%A4%A7%E5%AD%B8%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%8C%96%E5%AD%B823670-23670.htm",
+      "Chemistry_isu_104": "https://yamol.tw/exam-104%E5%B9%B4++%E7%BE%A9%E5%AE%88%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB++%E5%8C%96%E5%AD%B8%28%E5%90%AB%E6%99%AE%E9%80%9A%E5%8C%96%E5%AD%B8%E3%80%81%E6%9C%89%E6%A9%9F%E5%8C%96%E5%AD%B8%2922088-22088.htm",
+      "Chemistry_cmu_103": "https://yamol.tw/exam-103%E5%B9%B4++103%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8+%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%8C%96%E5%AD%B8%28%E5%8C%85%E6%8B%9B%E6%9C%89%E6%A9%9F%2927039-27039.htm",
+      "Chemistry_tzu_103": "https://yamol.tw/exam-103%E5%B9%B4++%E6%85%88%E6%BF%9F%E5%A4%A7%E5%AD%B8%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%8C%96%E5%AD%B824586-24586.htm",
+      "Chemistry_isu_103": "https://yamol.tw/exam-103%E5%B9%B4++103%E5%B9%B4%E7%BE%A9%E5%AE%88%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB++%E5%8C%96%E5%AD%B8%28%E5%90%AB%E6%99%AE%E9%80%9A%E5%8C%96%E5%AD%B8%E3%80%81%E6%9C%89%E6%A9%9F%E5%8C%96%E5%AD%B8%2924085-24085.htm",
+      "Chemistry_tzu_102": "https://yamol.tw/exam-102%E5%B9%B4++102%E6%85%88%E6%BF%9F%E5%A4%A7%E5%AD%B8+%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%8C%96%E5%AD%B8%28%E5%8C%85%E6%8B%9B%E6%9C%89%E6%A9%9F%2927064-27064.htm",
+      "Chemistry_isu_102": "https://yamol.tw/exam-102%E5%B9%B4++%E7%BE%A9%E5%AE%88%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB++%E5%8C%96%E5%AD%B8%28%E5%90%AB%E6%99%AE%E9%80%9A%E5%8C%96%E5%AD%B8%E3%80%81%E6%9C%89%E6%A9%9F%E5%8C%96%E5%AD%B8%2924526-24526.htm",
+      "Chemistry_cmu_102": "https://yamol.tw/exam-102%E5%B9%B4++%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E5%8C%96%E5%AD%B824384-24384.htm",
+      "Chemistry_tzu_101": "https://yamol.tw/exam-101%E5%B9%B4++%E6%85%88%E6%BF%9F%E5%A4%A7%E5%AD%B8+101+%E5%AD%B8%E5%B9%B4%E5%BA%A6%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E6%8B%9B%E7%94%9F%E5%8C%96%E5%AD%B8%E7%A7%9175518-75518.htm",
+      "Chemistry_cmu_101": "https://yamol.tw/exam-101%E5%B9%B4++%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E5%8C%96%E5%AD%B824531-24531.htm",
+      "Chemistry_isu_101": "https://yamol.tw/exam-101%E5%B9%B4++%E7%BE%A9%E5%AE%88%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB++%E5%8C%96%E5%AD%B8%28%E5%90%AB%E6%99%AE%E9%80%9A%E5%8C%96%E5%AD%B8%E3%80%81%E6%9C%89%E6%A9%9F%E5%8C%96%E5%AD%B8%2924470-24470.htm",
+      "Chemistry_isu_100": "https://yamol.tw/exam-100%E5%B9%B4++100+%E7%BE%A9%E5%AE%88%E5%A4%A7%E5%AD%B8_+%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E5%85%A5%E5%AD%B8%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E8%A9%A6%E9%A1%8C%EF%BC%9A+%E5%8C%96%E5%AD%B8+%28%E5%90%AB%E6%99%AE%E9%80%9A-24721.htm",
+      "Chemistry_cmu_100": "https://yamol.tw/exam-100%E5%B9%B4++100+%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%EF%BC%9A%E5%8C%96%E5%AD%B821378-21378.htm",
+      "Chemistry_cmu_99": "https://yamol.tw/exam-99%E5%B9%B4++%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB99%E5%B9%B4%E5%8C%96%E5%AD%B875407-75407.htm",
+      "Chemistry_isu_99": "https://yamol.tw/exam-99%E5%B9%B4++%E7%BE%A9%E5%AE%88%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB++%E5%8C%96%E5%AD%B8%28%E5%90%AB%E6%99%AE%E9%80%9A%E5%8C%96%E5%AD%B8%E3%80%81%E6%9C%89%E6%A9%9F%E5%8C%96%E5%AD%B8%2937184-37184.htm",
+      "Chemistry_cmu_98": "https://yamol.tw/exam-98%E5%B9%B4++98+%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E5%8C%96%E5%AD%B898553-98553.htm",
+      "Chemistry_cmu_97": "https://yamol.tw/exam-97%E5%B9%B4++97+%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E5%85%A5%E5%AD%B8%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E8%A9%A6%E9%A1%8C%EF%BC%9A%E5%8C%96%E5%AD%B8122458-122458.htm",
+      "Chemistry_cmu_95": "https://yamol.tw/exam-95%E5%B9%B4++95++%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E5%85%A5%E5%AD%B8%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%EF%BC%9A%E5%8C%96%E5%AD%B8137871-137871.htm",
+      "Chemistry_cmu_94": "https://yamol.tw/exam-94%E5%B9%B4++%5B%E9%9D%9E%E5%AE%98%E6%96%B9%E6%AD%A3%E8%A7%A3%5D94+%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%EF%BC%9A%E5%8C%96%E5%AD%B81072-107283.htm",
+      "Chemistry_cmu_93": "https://yamol.tw/exam-93%E5%B9%B4++93+%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%E8%A9%A6%E9%A1%8C%EF%BC%9A%E5%8C%96%E5%AD%B8125672-125672.htm",
+      "Chemistry_cmu_92": "https://yamol.tw/exam-92%E5%B9%B4++92+%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E5%85%A5%E5%AD%B8%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%EF%BC%9A%E5%8C%96%E5%AD%B8137895-137895.htm",
+      "Chemistry_cmu_91": "https://yamol.tw/exam-91%E5%B9%B4++91+%E4%B8%AD%E5%9C%8B%E9%86%AB%E8%97%A5%E5%A4%A7%E5%AD%B8_%E5%AD%B8%E5%A3%AB%E5%BE%8C%E4%B8%AD%E9%86%AB%E5%AD%B8%E7%B3%BB%E5%85%A5%E5%AD%B8%E6%8B%9B%E7%94%9F%E8%80%83%E8%A9%A6%EF%BC%9A%E5%8C%96%E5%AD%B8138153-138153.htm"
+    };
+
+    let activeSubjectId = 'English';
+    let maxYear = 115;
+    let urlMappings = {};
+    let activeEditingKey = null;
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadState();
+      renderSubjectList();
+      renderTable();
+    });
+
+    function loadState() {
+      const savedMaxYear = localStorage.getItem('yamol_max_year');
+      if (savedMaxYear) maxYear = parseInt(savedMaxYear, 10);
+      document.getElementById('maxYearDisplay').textContent = maxYear;
+      document.getElementById('maxYearInput').value = maxYear;
+
+      const savedMappings = localStorage.getItem('yamol_url_mappings');
+      if (savedMappings) {
+        try {
+          urlMappings = JSON.parse(savedMappings);
+        } catch(e) {
+          urlMappings = { ...DEFAULT_URL_MAPPINGS };
+        }
+      } else {
+        urlMappings = { ...DEFAULT_URL_MAPPINGS };
+      }
+
+      // 自動整合最新程式碼內建的 DEFAULT_URL_MAPPINGS
+      Object.assign(urlMappings, DEFAULT_URL_MAPPINGS);
+    }
+
+    function saveState() {
+      localStorage.setItem('yamol_max_year', maxYear);
+      localStorage.setItem('yamol_url_mappings', JSON.stringify(urlMappings));
+    }
+
+    function renderSubjectList() {
+      const container = document.getElementById('subjectList');
+      container.innerHTML = SUBJECTS.map(subj => {
+        const isActive = subj.id === activeSubjectId;
+        return `
+          <button onclick="switchSubject('${subj.id}')"
+            class="w-full text-left px-3.5 py-2.5 rounded-lg transition text-sm flex items-center justify-between ${
+              isActive 
+                ? 'bg-indigo-600 text-white font-medium shadow-sm' 
+                : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900'
+            }">
+            <span>${subj.name}</span>
+            <i class="fa-solid fa-chevron-right text-xs ${isActive ? 'text-indigo-200' : 'text-slate-300'}"></i>
+          </button>
+        `;
+      }).join('');
+    }
+
+    function switchSubject(id) {
+      activeSubjectId = id;
+      const subj = SUBJECTS.find(s => s.id === id);
+      document.getElementById('currentSubjectTitle').textContent = subj.name;
+      document.getElementById('subjectSubtitle').textContent = subj.subtitle;
+      renderSubjectList();
+      renderTable();
+    }
+
+    function isExamApplicable(school, subjectId, year) {
+      if (year < school.startYear) {
+        return { valid: false, reason: '未開考' };
+      }
+
+      if (subjectId === 'Chinese') {
+        if (school.type === 'WEST') return { valid: false, reason: '無此科' };
+      }
+      if (subjectId === 'TCM') {
+        if (school.type === 'WEST' || school.id === 'kmu') return { valid: false, reason: '無此科' };
+      }
+      if (subjectId === 'Physics') {
+        if (school.type === 'TCM') return { valid: false, reason: '無此科' };
+      }
+
+      return { valid: true };
+    }
+
+    function generateSearchUrl(school, year, subjectName) {
+      let deptName = '學士後中醫';
+      if (school.type === 'WEST' || school.id === 'kmu') deptName = '學士後醫學系';
+
+      const keyword = `${year}年 ${school.fullName} ${deptName} ${subjectName}`;
+      return `https://yamol.tw/search.php?q=${encodeURIComponent(keyword)}`;
+    }
+
+    function renderTable() {
+      const tbody = document.getElementById('examTableBody');
+      const subject = SUBJECTS.find(s => s.id === activeSubjectId);
+      const searchTerm = document.getElementById('yearSearchInput').value.trim();
+
+      let html = '';
+      for (let year = maxYear; year >= 90; year--) {
+        if (searchTerm && !year.toString().includes(searchTerm)) continue;
+
+        html += `
+          <tr class="hover:bg-slate-50/80 transition text-center">
+            <td class="px-3 py-2.5 font-bold text-slate-600 bg-slate-50 border-r border-b border-slate-200">${year} 年</td>
+        `;
+
+        SCHOOLS.forEach(school => {
+          const app = isExamApplicable(school, activeSubjectId, year);
+          const mappingKey = `${activeSubjectId}_${school.id}_${year}`;
+          const customUrl = urlMappings[mappingKey];
+
+          if (!app.valid) {
+            html += `
+              <td class="px-2 py-2 border-r border-b border-slate-200 bg-slate-50/40">
+                <span class="text-xs text-slate-300 select-none">${app.reason}</span>
+              </td>
+            `;
+          } else {
+            let targetUrl = customUrl;
+            let isVerified = false;
+
+            if (customUrl && customUrl.includes('exam-')) {
+              isVerified = true;
+            } else if (!targetUrl) {
+              targetUrl = generateSearchUrl(school, year, subject.name);
+            }
+
+            const badgeClass = isVerified
+              ? 'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100 hover:border-emerald-300'
+              : 'bg-sky-50 text-sky-700 border-sky-200 hover:bg-sky-100 hover:border-sky-300';
+
+            const iconClass = isVerified
+              ? 'fa-solid fa-circle-check text-emerald-600'
+              : 'fa-solid fa-magnifying-glass text-sky-500';
+
+            const btnText = `${year} ${school.name}`;
+
+            html += `
+              <td class="px-2 py-2 border-r border-b border-slate-200">
+                <a href="${targetUrl}" target="_blank" rel="noopener noreferrer"
+                  oncontextmenu="openContextMenu(event, '${mappingKey}', '${year} 年 ${school.name} ${subject.name}')"
+                  title="點擊前往：${isVerified ? '阿摩試題專頁' : '阿摩精準搜尋'} (右鍵可修改連結)"
+                  class="inline-flex items-center justify-center gap-1.5 w-full py-1.5 px-2 text-xs font-medium border rounded-md transition shadow-2xs ${badgeClass}">
+                  <i class="${iconClass} text-[11px]"></i>
+                  <span>${btnText}</span>
+                </a>
+              </td>
+            `;
+          }
+        });
+
+        html += `</tr>`;
+      }
+
+      tbody.innerHTML = html;
+    }
+
+    function filterYears() {
+      renderTable();
+    }
+
+    function openContextMenu(e, key, title) {
+      e.preventDefault();
+      activeEditingKey = key;
+      document.getElementById('editModalTitle').textContent = `修改連結：${title}`;
+      document.getElementById('modalUrlInput').value = urlMappings[key] || '';
+      document.getElementById('editUrlModal').classList.remove('hidden');
+    }
+
+    function closeEditModal() {
+      document.getElementById('editUrlModal').classList.add('hidden');
+      activeEditingKey = null;
+    }
+
+    function saveSingleUrl() {
+      if (!activeEditingKey) return;
+      const url = document.getElementById('modalUrlInput').value.trim();
+      if (url) {
+        urlMappings[activeEditingKey] = url;
+      } else {
+        delete urlMappings[activeEditingKey];
+      }
+      saveState();
+      closeEditModal();
+      renderTable();
+    }
+
+    function openYearModal() {
+      document.getElementById('yearModal').classList.remove('hidden');
+    }
+
+    function closeYearModal() {
+      document.getElementById('yearModal').classList.add('hidden');
+    }
+
+    function saveMaxYear() {
+      const val = parseInt(document.getElementById('maxYearInput').value, 10);
+      if (val && val >= 100 && val <= 130) {
+        maxYear = val;
+        document.getElementById('maxYearDisplay').textContent = maxYear;
+        saveState();
+        closeYearModal();
+        renderTable();
+      }
+    }
+
+    function openBatchModal() {
+      document.getElementById('batchJsonTextarea').value = JSON.stringify(urlMappings, null, 2);
+      document.getElementById('batchModal').classList.remove('hidden');
+    }
+
+    function closeBatchModal() {
+      document.getElementById('batchModal').classList.add('hidden');
+    }
+
+    function saveBatchJson() {
+      try {
+        const text = document.getElementById('batchJsonTextarea').value.trim();
+        urlMappings = text ? JSON.parse(text) : {};
+        saveState();
+        closeBatchModal();
+        renderTable();
+      } catch(err) {
+        alert('JSON 格式錯誤，請檢查後再試！');
+      }
+    }
+
+    function resetToDefault() {
+      if (confirm('確定要將所有網址恢復為系統預設值嗎？')) {
+        urlMappings = { ...DEFAULT_URL_MAPPINGS };
+        saveState();
+        closeBatchModal();
+        renderTable();
+      }
+    }
+  </script>
+</body>
+</html>
